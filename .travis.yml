@@ -9,3 +9,8 @@ before_script:
   - mysql -e 'drop database if exists flyrrm_test;'
   - mysql -e 'create database flyrrm_test;'
   - mysql flyrrm_test < tests/fixtures/flyrrm_test_schema.sql
+
+after_script:
+  - phpunit --coverage-clover=coverage.clover
+  - wget https://scrutinizer-ci.com/ocular.phar
+  - php ocular.phar code-coverage:upload --access-token="34ed3cb1485efe128f05f7aac7309f26ac4dad0712d8a712a194d9c3d51df26c" --format=php-clover coverage.clover
