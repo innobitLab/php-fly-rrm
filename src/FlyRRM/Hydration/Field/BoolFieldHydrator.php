@@ -22,7 +22,7 @@ class BoolFieldHydrator implements FieldHydrator
             return true;
         }
 
-        $allowedValues = array('true', 'false');
+        $allowedValues = array('true', 'false', '0', '1');
         $originalValue = trim(strtolower($originalValue));
 
         return in_array($originalValue, $allowedValues, true);

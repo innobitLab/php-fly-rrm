@@ -5,7 +5,7 @@ use FlyRRM\Hydration\Field\BoolFieldHydrator;
 
 class BoolFieldHydratorTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var \FlyRRM\Hydration\Field\DateFieldHydrator  */
+    /** @var \FlyRRM\Hydration\Field\BoolFieldHydrator  */
     private $hydrator;
 
     protected function setUp()
@@ -30,6 +30,8 @@ class BoolFieldHydratorTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertTrue($this->hydrator->hydrate(1));
         $this->assertFalse($this->hydrator->hydrate(0));
+        $this->assertTrue($this->hydrator->hydrate('1'));
+        $this->assertFalse($this->hydrator->hydrate('0'));
     }
 
     public function test_that_a_correct_bool_is_hydrated_to_bool()
