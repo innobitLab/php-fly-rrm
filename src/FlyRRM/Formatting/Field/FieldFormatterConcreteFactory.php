@@ -27,6 +27,9 @@ class FieldFormatterConcreteFactory implements FieldFormatterAbstractFactory
             case Field::TYPE_NUMBER:
                 return new NumberFieldFormatter();
 
+            case Field::TYPE_BOOL:
+                return new BoolFieldFormatter();
+
             default:
                 throw new \InvalidArgumentException(sprintf('unknown field type[%s], cannot create related formatter', $field->getType()));
         }

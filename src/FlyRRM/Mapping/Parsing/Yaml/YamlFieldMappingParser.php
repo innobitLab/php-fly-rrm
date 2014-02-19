@@ -12,7 +12,8 @@ class YamlFieldMappingParser
         'string' => Field::TYPE_STRING,
         'datetime' => Field::TYPE_DATETIME,
         'date' => Field::TYPE_DATE,
-        'number' => Field::TYPE_NUMBER
+        'number' => Field::TYPE_NUMBER,
+        'bool' => Field::TYPE_BOOL
     );
 
     public function parseField(Resource $resource, array $rawYamlParsedField)

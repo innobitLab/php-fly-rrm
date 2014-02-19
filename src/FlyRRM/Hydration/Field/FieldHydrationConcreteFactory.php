@@ -24,6 +24,10 @@ class FieldHydrationConcreteFactory implements FieldHydrationAbstractFactory
                 return new NumberFieldHydrator();
                 break;
 
+            case Field::TYPE_BOOL:
+                return new BoolFieldHydrator();
+                break;
+
             default:
                 throw new \InvalidArgumentException(sprintf('unknown field type[%s], cannot create related FieldHydrator', $field->getType()));
         }

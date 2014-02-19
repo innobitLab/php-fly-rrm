@@ -51,6 +51,12 @@ class FieldFormatterConcreteFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('FlyRRM\Formatting\Field\NumberFieldFormatter', $this->factory->buildFieldFormatterForField($testField));
     }
 
+    public function test_that_a_bool_field_get_bool_formatter()
+    {
+        $testField = $this->generateTestField(Field::TYPE_BOOL);
+        $this->assertInstanceOf('FlyRRM\Formatting\Field\BoolFieldFormatter', $this->factory->buildFieldFormatterForField($testField));
+    }
+
     private function generateTestField($fieldType)
     {
         $testResource = new Resource('my__0', 'myResource', 'my_resource', 'my_id');

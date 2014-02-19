@@ -48,6 +48,12 @@ class FieldHydrationConcreteFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('FlyRRM\Hydration\Field\NumberFieldHydrator', $this->factory->buildFieldHydratorForField($testField));
     }
 
+    public function test_that_a_bool_field_get_bool_hydrator()
+    {
+        $testField = $this->generateTestField(Field::TYPE_BOOL);
+        $this->assertInstanceOf('FlyRRM\Hydration\Field\BoolFieldHydrator', $this->factory->buildFieldHydratorForField($testField));
+    }
+
     private function generateTestField($fieldType)
     {
         $testResource = new Resource('my__0', 'myResource', 'my_resource', 'my_id');

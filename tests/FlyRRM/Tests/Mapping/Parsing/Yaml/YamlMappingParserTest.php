@@ -83,6 +83,11 @@ resource:
             name: 'field_five'
             alias: 'fieldFive'
             type: 'number'
+
+        -
+            name: 'field_six'
+            alias: 'fieldSix'
+            type: 'bool'
 EOT;
 
         /** @var \FlyRRM\Mapping\Resource $rootResource */
@@ -130,6 +135,13 @@ EOT;
         $this->assertEquals('field_five', $fifthField->getName());
         $this->assertEquals('fieldFive', $fifthField->getAlias());
         $this->assertEquals('number', $fifthField->getType());
+
+        /** @var \FlyRRM\Mapping\Field $sixField */
+        $sixField = $fields[5];
+        $this->assertInstanceOf('FlyRRM\Mapping\Field', $sixField);
+        $this->assertEquals('field_six', $sixField->getName());
+        $this->assertEquals('fieldSix', $sixField->getAlias());
+        $this->assertEquals('bool', $sixField->getType());
     }
 
     public function test_that_two_resource_have_the_correct_id()

@@ -108,6 +108,15 @@ class YamlFieldMappingParserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(null, $field->getFormatString());
     }
 
+    public function test_that_a_field_mapping_with_type_bool_is_bool()
+    {
+        $rawYamlParsedField = array('name' => 'myName', 'alias' => 'myAlias', 'type' => 'bool');
+        $field = $this->parser->parseField($this->buildTestResource, $rawYamlParsedField);
+
+        $this->assertEquals('bool', $field->getType());
+        $this->assertEquals(null, $field->getFormatString());
+    }
+
     public function test_that_a_field_mapping_with_format_string_is_parsed()
     {
         $rawYamlParsedField = array('name' => 'myName', 'alias' => 'myAlias', 'type' => 'number', 'format-string' => '0.##');

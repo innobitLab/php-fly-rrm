@@ -7,6 +7,7 @@ class Field
     const TYPE_DATETIME = 'datetime';
     const TYPE_DATE = 'date';
     const TYPE_NUMBER = 'number';
+    const TYPE_BOOL = 'bool';
 
     private $name;
     private $alias;
