@@ -6,5 +6,5 @@ php:
 
 before_script:
   - composer install -o
-  - mysql -e 'drop database if exist flyrrm_test;'
+  - mysql -e 'drop database if exists flyrrm_test;'
   - mysql -e 'create database flyrrm_test;'
