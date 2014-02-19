@@ -26,6 +26,12 @@ class DateTimeFieldFormatterTest extends \PHPUnit_Framework_TestCase
         $formatter->format('hello world');
     }
 
+    public function test_that_a_null_is_formatted_to_null()
+    {
+        $formatter = new DateTimeFieldFormatter();
+        $this->assertSame(null, $formatter->format(null));
+    }
+
     public function test_that_a_datetime_is_correctly_formatted()
     {
         $formatter = new DateTimeFieldFormatter('d/m/Y H:i:s');

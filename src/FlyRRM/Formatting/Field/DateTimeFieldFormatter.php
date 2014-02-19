@@ -20,6 +20,10 @@ class DateTimeFieldFormatter
 
     public function format($rawValue)
     {
+        if ($rawValue === null) {
+            return null;
+        }
+
         if (!($rawValue instanceof \DateTime)) {
             throw new \InvalidArgumentException();
         }
