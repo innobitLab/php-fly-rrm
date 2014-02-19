@@ -2,7 +2,6 @@
 namespace FlyRRM\Formatting;
 
 use FlyRRM\Formatting\Field\FieldFormatterAbstractFactory;
-use FlyRRM\Mapping\Field;
 use FlyRRM\Mapping\Relationship;
 use FlyRRM\Mapping\Resource;
 
@@ -18,7 +17,6 @@ class ArrayFormatter
 
     public function format(array $structuredData, Resource $resource)
     {
-        $fields = $resource->getFields();
         $resourceRows = $structuredData[$resource->getAlias()];
 
         $res = array();

@@ -4,7 +4,6 @@ namespace FlyRRM\Mapping\Parsing\Yaml;
 use FlyRRM\Mapping\InvalidMappingConfigurationException;
 use FlyRRM\Mapping\Relationship;
 use FlyRRM\Mapping\Resource;
-use Psr\Log\InvalidArgumentException;
 
 class YamlRelationshipMappingParser
 {

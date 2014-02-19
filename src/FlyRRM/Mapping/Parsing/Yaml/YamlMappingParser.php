@@ -1,11 +1,8 @@
 <?php
 namespace FlyRRM\Mapping\Parsing\Yaml;
 
-use FlyRRM\Mapping\Field;
 use FlyRRM\Mapping\InvalidMappingConfigurationException;
-use FlyRRM\Mapping\Relationship;
 use FlyRRM\Mapping\Resource;
-use FlyRRM\Tests\Mapping\Parsing\Yaml\YamlFieldMappingParserTest;
 use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Yaml\Yaml;
 
@@ -66,8 +63,6 @@ class YamlMappingParser
 
         $rootResource = $this->resourceParser->parseResource($parsedResource, $this->resourcesCount++);
         $fields = $this->convertParsedFieldsToObjArray($rootResource, $parsedResource['fields']);
-
-        $relationships = null;
 
         $parsedRelationships = isset($parsedResource['relationships']) ? $parsedResource['relationships'] : null;
 

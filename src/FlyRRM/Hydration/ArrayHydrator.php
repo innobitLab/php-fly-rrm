@@ -1,11 +1,7 @@
 <?php
 namespace FlyRRM\Hydration;
 
-use FlyRRM\Hydration\Field\DateTimeFieldHydrator;
 use FlyRRM\Hydration\Field\FieldHydrationAbstractFactory;
-use FlyRRM\Hydration\Field\FieldHydrationConcreteFactory;
-use FlyRRM\Hydration\Field\StringFieldHydrator;
-use FlyRRM\Mapping\Field;
 use FlyRRM\Mapping\Relationship;
 use FlyRRM\Mapping\Resource;
 
