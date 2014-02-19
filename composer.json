@@ -1,5 +1,5 @@
 {
-    "name": "php-fly-rrm",
+    "name": "innobitlab/php-fly-rrm",
     "description": "An entity free 'RRM' to  extract structured data from relational DBMS",
     "minimum-stability": "stable",
     "license": "MIT",
