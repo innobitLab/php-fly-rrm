@@ -100,6 +100,41 @@ class ArrayFormattingTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedData, $outputData);
     }
 
+    public function test_that_a_structured_data_with_null_many_to_one_relationship_is_formatted()
+    {
+        $mainResource = new Resource('my__0', 'myCoolResource', 'my_cool_table', 'id');
+        $stringField = new Field($mainResource, 'myCoolField', 'my_cool_field', Field::TYPE_STRING);
+        $mainResource->addField($stringField);
+
+        $referencedResource = new Resource('my__1', 'myHotResource', 'my_hot_resource', 'id');
+        $dateField = new Field($referencedResource, 'myHotField', 'my_hot_field', Field::TYPE_DATE, 'd/m/Y');
+        $referencedResource->addField($dateField);
+
+        $relationship = new Relationship($mainResource, $referencedResource, 'many-to-one', 'cool_id');
+        $mainResource->addRelationship($relationship);
+
+        $structuredData = array(
+            'myCoolResource' => array(
+                array(
+                    'myCoolField' => 'my cool value!',
+                    'myHotResource' => null
+                )
+            )
+        );
+
+        $expectedData = array(
+            'myCoolResource' => array(
+                array(
+                    'myCoolField' => 'my cool value!',
+                    'myHotResource' => null
+                )
+            )
+        );
+
+        $outputData = $this->arrayFormatter->format($structuredData, $mainResource);
+        $this->assertEquals($expectedData, $outputData);
+    }
+
     public function test_that_a_structured_data_with_one_to_many_relationship_is_formatted()
     {
         $mainResource = new Resource('my__0', 'myCoolResource', 'my_cool_table', 'id');

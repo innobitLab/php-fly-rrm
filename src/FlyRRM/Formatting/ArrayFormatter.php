@@ -41,16 +41,23 @@ class ArrayFormatter
         $res = array();
 
         foreach ($row as $fieldAlias => $fieldValue) {
-            if (is_array($fieldValue)) {
-                $relationshipObj = $resource->getRelationshipByReferencedResourceAlias($fieldAlias);
-                $res[$fieldAlias] = $this->formatRelationship($relationshipObj, $fieldValue);
-                continue;
-            }
-
-            $res[$fieldAlias] = $this->formatSingleFieldInResource($resource, $fieldAlias, $fieldValue);
+            $res[$fieldAlias] = $this->formatResourceField($resource, $fieldAlias, $fieldValue);
         }
 
         return $res;
+    }
+
+    public function formatResourceField(Resource $resource, $fieldAlias, $fieldValue) {
+        if ($fieldValue === null) {
+            return null;
+        }
+
+        if (is_array($fieldValue)) {
+            $relationshipObj = $resource->getRelationshipByReferencedResourceAlias($fieldAlias);
+            return $this->formatRelationship($relationshipObj, $fieldValue);
+        }
+
+        return $this->formatSimpleFieldInResource($resource, $fieldAlias, $fieldValue);
     }
 
     public function formatRelationship(Relationship $relationshipObj, array $value)
@@ -77,7 +84,7 @@ class ArrayFormatter
         return $subResourceRes;
     }
 
-    public function formatSingleFieldInResource(Resource $resource, $fieldAlias, $fieldValue)
+    public function formatSimpleFieldInResource(Resource $resource, $fieldAlias, $fieldValue)
     {
         $fieldObj = $resource->getFieldByAlias($fieldAlias);
         $fieldFormatter = $this->fieldFormatterFactory->buildFieldFormatterForField($fieldObj);
