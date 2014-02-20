@@ -63,8 +63,7 @@ class ArrayHydrator
             $currentReferencedResource = $r->getReferencedResource();
 
             if ($r->getType() === Relationship::TYPE_MANY_TO_ONE) {
-                $rowRes[$currentReferencedResource->getAlias()] =
-                    $this->hydrateResourceFields($currentReferencedResource, $row);
+                $rowRes[$currentReferencedResource->getAlias()] = $this->hydrateResourceFields($currentReferencedResource, $row);
 
                 if ($currentReferencedResource->hasRelationships()) {
                     $referencedsRes = $this->hydrateResourceRelationships($currentReferencedResource, $row);
@@ -86,6 +85,11 @@ class ArrayHydrator
     private function hydrateOneToManySubResource(Resource $referencedResource, array $row)
     {
         $relationshipRows = $row[$referencedResource->getResourceUniqueIdentifier()];
+
+        if ($relationshipRows === null) {
+            return array($referencedResource->getAlias() => array());
+        }
+
         return $this->hydrate($relationshipRows, $referencedResource);
     }
 }

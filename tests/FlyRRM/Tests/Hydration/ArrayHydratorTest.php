@@ -373,4 +373,39 @@ class ArrayHydratorTest extends \PHPUnit_Framework_TestCase
         $resultArray = $this->hydrator->hydrate($plainArray, $mainResource);
         $this->assertEquals($expectedStructuredArray, $resultArray);
     }
+
+    public function test_that_a_null_one_to_many_relationship_is_hydrated_to_a_structured_array()
+    {
+        $mainResource = new Resource('my__0', 'myCoolResource', 'my_cool_table', 'my_cool_id');
+        $mainResourceField = new Field($mainResource, 'myCoolField', 'my_cool_field', Field::TYPE_STRING);
+        $mainResource->addField($mainResourceField);
+
+        $referencedResource = new Resource('my__1', 'myHotResource', 'my_hot_table', 'my_hot_id');
+        $referencedResourceField = new Field($referencedResource, 'myHotField', 'my_hot_field', Field::TYPE_STRING);
+        $referencedResource->addField($referencedResourceField);
+        $referencedResourceField = new Field($referencedResource, 'myHotField2', 'my_hot_field_2', Field::TYPE_STRING);
+        $referencedResource->addField($referencedResourceField);
+
+        $relationship = new Relationship($mainResource, $referencedResource, 'one-to-many', 'cool_id');
+        $mainResource->addRelationship($relationship);
+
+        $plainArray = array(
+            array(
+                'my__0_myCoolField' => 'my cool value!',
+                'my__1' => null,
+            )
+        );
+
+        $expectedStructuredArray = array(
+            'myCoolResource' => array(
+                array (
+                    'myCoolField' => 'my cool value!',
+                    'myHotResource' => array()
+                )
+            )
+        );
+
+        $resultArray = $this->hydrator->hydrate($plainArray, $mainResource);
+        $this->assertEquals($expectedStructuredArray, $resultArray);
+    }
 }
