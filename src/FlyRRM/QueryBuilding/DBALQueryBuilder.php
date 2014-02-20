@@ -76,20 +76,13 @@ class DBALQueryBuilder implements QueryBuilder
         return $joinsClause;
     }
 
-    public function buildToManyQueries(Resource $resource)
+    public function buildToManyQueries(Relationship $relationship)
     {
-        $res = array();
-
-        $relationships = $resource->getRelationships();
-
-        /** @var \FlyRRM\Mapping\Relationship $rel */
-        foreach ($relationships as $rel) {
-            if ($rel->getType() === Relationship::TYPE_ONE_TO_MANY) {
-                $res[] = $this->buildQuery($rel->getReferencedResource()) . $this->buildToManyWhereClause($rel);
-            }
+        if ($relationship->getType() !== Relationship::TYPE_ONE_TO_MANY) {
+            throw new \InvalidArgumentException('relationship must be of type one-to-many');
         }
 
-        return $res;
+        return $this->buildQuery($relationship->getReferencedResource()) . $this->buildToManyWhereClause($relationship);
     }
 
     private function buildToManyWhereClause(Relationship $rel)

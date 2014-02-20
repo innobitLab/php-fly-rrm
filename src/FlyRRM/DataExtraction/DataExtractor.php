@@ -26,20 +26,18 @@ class DataExtractor
         /** @var \FlyRRM\Mapping\Relationship $rel */
         foreach ($resource->getRelationships() as $rel) {
             if ($rel->getType() === Relationship::TYPE_ONE_TO_MANY) {
-                $toManySqls = $this->queryBuilder->buildToManyQueries($resource);
+                $toManySql = $this->queryBuilder->buildToManyQueries($rel);
 
-                foreach ($toManySqls as $sql) {
-                    foreach ($mainData as $rowIdx => $row) {
-                        $mainResource = $rel->getMainResource();
-                        $referencedResource = $rel->getReferencedResource();
-                        $idKey = $mainResource->getResourceUniqueIdentifier() . '_' . $mainResource->getPrimaryKey();
-                        $params = array(
-                            ':' . $idKey => $row[$idKey]
-                        );
+                foreach ($mainData as $rowIdx => $row) {
+                    $mainResource = $rel->getMainResource();
+                    $referencedResource = $rel->getReferencedResource();
+                    $idKey = $mainResource->getResourceUniqueIdentifier() . '_' . $mainResource->getPrimaryKey();
+                    $params = array(
+                        ':' . $idKey => $row[$idKey]
+                    );
 
-                        $mainData[$rowIdx][$referencedResource->getResourceUniqueIdentifier()] =
-                            $this->queryExecutor->executeQuery($sql, $params);
-                    }
+                    $mainData[$rowIdx][$referencedResource->getResourceUniqueIdentifier()] =
+                        $this->queryExecutor->executeQuery($toManySql, $params);
                 }
             }
         }

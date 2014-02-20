@@ -103,12 +103,28 @@ class DBALQueryBuilderTest extends \PHPUnit_Framework_TestCase
         $relationship = new Relationship($mainResource, $referencedResource, 'one-to-many', 'hot_id');
         $mainResource->addRelationship($relationship);
 
-        $generatedMainSql = $this->dbalQueryBuilder->buildQuery($mainResource);
-        $expectedMainSql = 'select my__0.id as my__0_id, my__0.my_cool_field as my__0_myCoolField from my_cool_table my__0';
-        $this->assertEquals($expectedMainSql, $generatedMainSql);
-
-        $generatedToManySql = $this->dbalQueryBuilder->buildToManyQueries($mainResource);
-        $expectedToManySql = array('select my__1.id as my__1_id, my__1.my_hot_field as my__1_myHotField from my_hot_table my__1 where my__1.hot_id = :my__0_id');
+        $generatedToManySql = $this->dbalQueryBuilder->buildToManyQueries($relationship);
+        $expectedToManySql = 'select my__1.id as my__1_id, my__1.my_hot_field as my__1_myHotField from my_hot_table my__1 where my__1.hot_id = :my__0_id';
         $this->assertEquals($expectedToManySql, $generatedToManySql);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage relationship must be of type one-to-many
+     */
+    public function test_that_to_many_queries_without_one_to_many_relationship_throws_exception()
+    {
+        $mainResource = new Resource('my__0', 'myCoolResource', 'my_cool_table', 'id');
+        $mainResourceField = new Field($mainResource, 'myCoolField', 'my_cool_field', Field::TYPE_STRING);
+        $mainResource->addField($mainResourceField);
+
+        $referencedResource = new Resource('my__1', 'myHotResource', 'my_hot_table', 'id');
+        $referencedResourceField = new Field($referencedResource, 'myHotField', 'my_hot_field', Field::TYPE_STRING);
+        $referencedResource->addField($referencedResourceField);
+
+        $relationship = new Relationship($mainResource, $referencedResource, Relationship::TYPE_MANY_TO_ONE, 'hot_id');
+        $mainResource->addRelationship($relationship);
+
+        $generatedToManySql = $this->dbalQueryBuilder->buildToManyQueries($relationship);
     }
 }
