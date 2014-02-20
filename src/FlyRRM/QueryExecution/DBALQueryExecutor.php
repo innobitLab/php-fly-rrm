@@ -23,6 +23,7 @@ class DBALQueryExecutor implements QueryExecutor
         }
 
         $stmt->execute();
+        $connection->close();
         return $stmt->fetchAll();
     }
 
