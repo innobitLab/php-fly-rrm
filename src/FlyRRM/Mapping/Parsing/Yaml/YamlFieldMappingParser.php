@@ -7,6 +7,11 @@ use FlyRRM\Mapping\Resource;
 
 class YamlFieldMappingParser
 {
+    const NAME_KEY = 'name';
+    const ALIAS_KEY = 'alias';
+    const TYPE_KEY = 'type';
+    const FORMAT_STRING_KEY = 'format-string';
+
     private $externalTypeToInternalType = array(
         '' => Field::TYPE_STRING,
         'string' => Field::TYPE_STRING,
@@ -23,22 +28,31 @@ class YamlFieldMappingParser
 
     public function validateField($rawYamlParsedField)
     {
-        if (!isset($rawYamlParsedField['name'])) {
+        $this->validateName($rawYamlParsedField);
+        $this->validateAlias($rawYamlParsedField);
+        $this->validateType($rawYamlParsedField);
+    }
+
+    private function validateName(array $rawYamlParsedField)
+    {
+        if (!array_key_exists(self::NAME_KEY, $rawYamlParsedField)) {
             throw new InvalidMappingConfigurationException('missing field name key');
         }
 
-        if (empty($rawYamlParsedField['name'])) {
+        if (empty($rawYamlParsedField[self::NAME_KEY])) {
             throw new InvalidMappingConfigurationException('field name must be set');
         }
+    }
 
-        if (!isset($rawYamlParsedField['alias'])) {
-            throw new InvalidMappingConfigurationException('missing field alias key');
-        }
-
-        if (empty($rawYamlParsedField['alias'])) {
+    private function validateAlias(array $rawYamlParsedField)
+    {
+        if (array_key_exists(self::ALIAS_KEY, $rawYamlParsedField) && empty($rawYamlParsedField[self::ALIAS_KEY])) {
             throw new InvalidMappingConfigurationException('field alias must be set');
         }
+    }
 
+    private function validateType(array $rawYamlParsedField)
+    {
         $parsedFieldType = $this->parseFieldType($rawYamlParsedField);
 
         if (!array_key_exists($parsedFieldType, $this->externalTypeToInternalType)) {
@@ -48,15 +62,19 @@ class YamlFieldMappingParser
 
     private function parseFieldType($rawYamlParsedField)
     {
-        return isset($rawYamlParsedField['type']) ? $rawYamlParsedField['type'] : '';
+        return isset($rawYamlParsedField[self::TYPE_KEY]) ? $rawYamlParsedField[self::TYPE_KEY] : '';
     }
 
     private function convertSingleParsedFieldToObj(Resource $resource, array $rawYamlParsedField)
     {
-        $parsedFieldType = isset($rawYamlParsedField['type']) ? $rawYamlParsedField['type'] : '';
+        $parsedFieldType = $this->parseFieldType($rawYamlParsedField);
         $internalFieldType = $this->externalTypeToInternalType[$parsedFieldType];
-        $formatString = isset($rawYamlParsedField['format-string']) ? $rawYamlParsedField['format-string'] : null;
 
-        return new Field($resource, $rawYamlParsedField['alias'], $rawYamlParsedField['name'], $internalFieldType, $formatString);
+        $formatString = isset($rawYamlParsedField[self::FORMAT_STRING_KEY]) ? $rawYamlParsedField[self::FORMAT_STRING_KEY] : null;
+
+        $name = $rawYamlParsedField[self::NAME_KEY];
+        $alias = array_key_exists(self::ALIAS_KEY, $rawYamlParsedField) ? $rawYamlParsedField[self::ALIAS_KEY] : $name;
+
+        return new Field($resource, $alias, $name, $internalFieldType, $formatString);
     }
 }

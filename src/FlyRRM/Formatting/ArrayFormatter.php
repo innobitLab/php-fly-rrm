@@ -47,7 +47,8 @@ class ArrayFormatter
         return $res;
     }
 
-    public function formatResourceField(Resource $resource, $fieldAlias, $fieldValue) {
+    public function formatResourceField(Resource $resource, $fieldAlias, $fieldValue)
+    {
         if ($fieldValue === null) {
             return null;
         }

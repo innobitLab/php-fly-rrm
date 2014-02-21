@@ -36,14 +36,13 @@ class YamlFieldMappingParserTest extends \PHPUnit_Framework_TestCase
         $this->parser->validateField($rawYamlParsedField);
     }
 
-    /**
-     * @expectedException \FlyRRM\Mapping\InvalidMappingConfigurationException
-     * @expectedExceptionMessage missing field alias key
-     */
-    public function test_that_a_field_mapping_without_alias_key_is_invalid()
+    public function test_that_a_field_mapping_without_alias_key_will_take_name_as_alias()
     {
         $rawYamlParsedField = array('name' => 'myName');
         $this->parser->validateField($rawYamlParsedField);
+        $field = $this->parser->parseField($this->buildTestResource, $rawYamlParsedField);
+
+        $this->assertEquals('myName', $field->getAlias());
     }
 
     /**
