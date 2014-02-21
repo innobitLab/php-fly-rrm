@@ -51,8 +51,8 @@ id | name | surname | id_contract | id_user_creator | id_user_last_edit
 id | value | id_employee | id_bank
 --- | --- | --- | --- 
 1 | 1200.23 | 1 | 2 
-1 | 1540 | 2 | 3 
-1 | 1240.23 | 1 | 2 
+2 | 1540 | 2 | 3 
+3 | 1240.23 | 1 | 2 
 
 and you have been asked to export this data in a similar structured json format:
 
