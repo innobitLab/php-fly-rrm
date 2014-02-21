@@ -272,3 +272,49 @@ $json = json_encode($formattedData, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
 ### With facade (more easy)
 
 A proper facade to manage all the process end-to-end will be soon available
+
+## Mapping
+
+Currently the only implemented mapping parser is a YAML mapping parser.
+Other parsers can be implemented (ex: json, xml, php arrays).
+
+### YAML
+
+The root node **must** be a resource.
+A mapping **must** contain only one root resource.
+
+#### Resource properties
+
+* ```alias``` : **mandatory**, will be the "name" of the formatted resource
+* ```table``` : **mandatory**, the name of the table where the resource data is stored
+* ```primary-key``` : **mandatory**, the name of the primary-key fields.
+* ```fields``` : **mandatory**, **must** be a sequence of fields
+* ```relationships``` : **must** be a sequence of relationship
+
+A resource **must** have one and only one table.
+At the moment only one-field primary keys are supported.
+Fly-rrm doesn't mind about the primary-key field type, be sure to use a type compatible with the sub-resources primary-key.
+
+A resource **must** contain one or more fields.
+A resource could contain one or more relationship.
+
+#### Field properties
+
+* ```alias``` : optional, will be the "name" of the formatted resource field
+* ```name``` : **mandatory**, the name of the field in the resource table
+* ```type``` : optional, the type of the field
+* ```format-string```: optional, the field format string.
+
+If no type is specified will be by default a string.
+Allowed types are: ```string```, ```date```, ```datetime```, ```number```.
+Currently format-string is supported only on date and datetime types.
+You can use php's \Datetime::format pattern syntax.
+
+#### Relationship properties
+
+* ```type``` : **mandatory**, the type of relationship
+* ```join-column``` : **mandatory**, the name of the join field
+* ```resource``` : **mandatory**, mapping of the related resource
+
+Supported relationship types are: ```one-to-many``` and ```many-to-one```.
+Many to many isn't useful because you always start watching from a resource to another.
