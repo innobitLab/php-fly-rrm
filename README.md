@@ -287,13 +287,15 @@ A mapping **must** contain only one root resource.
 
 * ```alias``` : **mandatory**, will be the "name" of the formatted resource
 * ```table``` : **mandatory**, the name of the table where the resource data is stored
-* ```primary-key``` : **mandatory**, the name of the primary-key fields.
+* ```primary-key``` : **mandatory**, the name of the primary-key field
 * ```fields``` : **mandatory**, **must** be a sequence of fields
-* ```relationships``` : **must** be a sequence of relationship
+* ```relationships``` : optional, **must** be a sequence of relationship
 
 A resource **must** have one and only one table.
+
 At the moment only one-field primary keys are supported.
 Fly-rrm doesn't mind about the primary-key field type, be sure to use a type compatible with the sub-resources primary-key.
+
 
 A resource **must** contain one or more fields.
 A resource could contain one or more relationship.
@@ -306,18 +308,21 @@ A resource could contain one or more relationship.
 * ```format-string```: optional, the field format string.
 
 If no alias is specified will be used the name.
+
 If no type is specified will be by default a string.
 Allowed types are: ```string```, ```date```, ```datetime```, ```number```.
+
 Currently format-string is supported only on date and datetime types.
 You can use php's \Datetime::format pattern syntax.
 
 #### Relationship properties
 
 * ```type``` : **mandatory**, the type of relationship
-* ```join-column``` : **mandatory**, the name of the join field
-* ```resource``` : **mandatory**, mapping of the related resource
+* ```join-column``` : **mandatory**, the name of the join field on db
+* ```resource``` : **mandatory**, mapping of the referenced resource
 
 Supported relationship types are: ```one-to-many``` and ```many-to-one```.
+
 Many to many isn't useful because you always start watching from a resource to another.
 
 You can indent as many resource with relationships as you need.
@@ -325,7 +330,8 @@ You can indent as many resource with relationships as you need.
 ## Connect to database
 
 The only query builder and executor availables are the Docrine DBAL ones.
-Using DBAL you can perform extraction an a big variety of DBMS.
+Using DBAL you can perform extraction on many different DBMS.
+
 For futher information about DBAL see: http://www.doctrine-project.org/projects/dbal.html
 
 ## Hydrating data
@@ -335,7 +341,8 @@ This will be a php associative array with alias and proper objects (ex: \DateTim
 
 ## Formatting data
 
-The hydrated array could be formatted before export. This process will transform objects in strings according to the specified format-string.
+The hydrated array should be formatted before export. This process will transform objects in strings according to the specified format-string.
+Numbers won't be formatted.
 
 ## Exporting data
 
@@ -345,14 +352,16 @@ You can encode formatted data to your prefered format (ex. json, xml...)
 
 This project has been developed with the Test Driven Development and Pomodoro technique methodologies.
 All the production code is covered by tests.
+
 Until this readme the project has required me 55 Pomodoros of development.
 
 ## Contributing
 
 If you find any bug or you want to share improvements please send a pull-request.
-Bugs and new features test coverage will be appreciated.
+Test coverage on bugs or new features will be appreciated.
 
 ## Credits
 
 Idea and development: Gabriele Tondi <info@gabrieletondi.it>
+
 Thanks to Innobit s.r.l. for giving me the opportunity to share this code.
