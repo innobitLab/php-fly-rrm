@@ -305,6 +305,7 @@ A resource could contain one or more relationship.
 * ```type``` : optional, the type of the field
 * ```format-string```: optional, the field format string.
 
+If no alias is specified will be used the name.
 If no type is specified will be by default a string.
 Allowed types are: ```string```, ```date```, ```datetime```, ```number```.
 Currently format-string is supported only on date and datetime types.
@@ -318,3 +319,40 @@ You can use php's \Datetime::format pattern syntax.
 
 Supported relationship types are: ```one-to-many``` and ```many-to-one```.
 Many to many isn't useful because you always start watching from a resource to another.
+
+You can indent as many resource with relationships as you need.
+
+## Connect to database
+
+The only query builder and executor availables are the Docrine DBAL ones.
+Using DBAL you can perform extraction an a big variety of DBMS.
+For futher information about DBAL see: http://www.doctrine-project.org/projects/dbal.html
+
+## Hydrating data
+
+As shown in the example you can even use the hydrated array data.
+This will be a php associative array with alias and proper objects (ex: \DateTime for date and datetime types).
+
+## Formatting data
+
+The hydrated array could be formatted before export. This process will transform objects in strings according to the specified format-string.
+
+## Exporting data
+
+You can encode formatted data to your prefered format (ex. json, xml...)
+
+## Methodologies
+
+This project has been developed with the Test Driven Development and Pomodoro technique methodologies.
+All the production code is covered by tests.
+Until this readme the project has required me 55 Pomodoros of development.
+
+## Contributing
+
+If you find any bug or you want to share improvements please send a pull-request.
+Bugs and new features test coverage will be appreciated.
+
+## Credits
+
+Idea and development: Gabriele Tondi <info@gabrieletondi.it>
+Thanks to Innobit s.r.l. for giving me the opportunity to share this code.
