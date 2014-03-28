@@ -8,6 +8,7 @@ before_script:
   - composer install -o
   - mysql -e 'drop database if exists flyrrm_test;'
   - mysql -e 'create database flyrrm_test;'
+  - echo "USE mysql;\nUPDATE user SET password=PASSWORD('travis') WHERE user='travis';\nFLUSH PRIVILEGES;\n" | mysql -u root
   - mysql flyrrm_test < tests/fixtures/flyrrm_test_schema.sql
 
 after_script:
