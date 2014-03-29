@@ -437,29 +437,6 @@ resource:
             name: 'name'
             alias: 'nome'
 
-        -
-            name: 'surname'
-            alias: 'cognome'
-
-        -
-            name: 'code'
-            alias: 'codice'
-
-        -
-            name: 'birthday'
-            alias: 'dataNascita'
-            type: 'date'
-
-        -
-            name: 'created'
-            alias: 'creatoIl'
-            type: 'datetime'
-
-        -
-            name: 'edited'
-            alias: 'modificatoIl'
-            type: 'datetime'
-
     where: 'id = :id'
 EOT;
 
@@ -474,6 +451,37 @@ EOT;
         $dataExtractor = new DataExtractor($dbalQueryBuilder, $queryExecutor);
 
         $plainData = $dataExtractor->extractData($resource, array('id' => 2));
+
+        $this->assertEquals(1, sizeof($plainData));
+    }
+
+    public function test_end_to_end_with_simple_where_using_alias_with_params()
+    {
+        $yamlMapping = <<<EOT
+resource:
+    alias: 'impiegati'
+    table: 'employees'
+    primary-key: 'id'
+
+    fields:
+        -
+            name: 'name'
+            alias: 'nome'
+
+    where: 'impiegati.nome = :nome'
+EOT;
+
+        $parser = new YamlMappingParser();
+        $resource = $parser->parse($yamlMapping);
+
+        $dbalQueryBuilder = new DBALQueryBuilder();
+
+        $databaseConf = $this->buildDatabaseConfigurationFromGlobals();
+        $queryExecutor = new DBALQueryExecutor($databaseConf);
+
+        $dataExtractor = new DataExtractor($dbalQueryBuilder, $queryExecutor);
+
+        $plainData = $dataExtractor->extractData($resource, array('nome' => 'Mario'));
 
         $this->assertEquals(1, sizeof($plainData));
     }
