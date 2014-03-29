@@ -17,11 +17,11 @@ class DataExtractor
         $this->queryExecutor = $queryExecutor;
     }
 
-    public function extractData(Resource $resource)
+    public function extractData(Resource $resource, array $params = array())
     {
         $mainSql = $this->queryBuilder->buildQuery($resource);
 
-        $mainData = $this->queryExecutor->executeQuery($mainSql);
+        $mainData = $this->queryExecutor->executeQuery($mainSql, $params);
 
         /** @var \FlyRRM\Mapping\Relationship $rel */
         foreach ($resource->getRelationships() as $rel) {

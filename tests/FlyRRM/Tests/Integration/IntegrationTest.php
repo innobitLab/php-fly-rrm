@@ -430,9 +430,8 @@ EOT;
         $this->assertEquals($expectedData, $hydratedData);
     }
 
-    public function test_end_to_end_with_simple_where()
+    public function test_end_to_end_with_simple_where_with_params()
     {
-
         $yamlMapping = <<<EOT
 resource:
     alias: 'impiegati'
@@ -466,8 +465,8 @@ resource:
             name: 'edited'
             alias: 'modificatoIl'
             type: 'datetime'
-    where: 'id=2'
 
+    where: 'id = :id'
 EOT;
 
         $parser = new YamlMappingParser();
@@ -486,10 +485,9 @@ EOT;
 
         $dataExtractor = new DataExtractor($dbalQueryBuilder, $queryExecutor);
 
-        $plainData = $dataExtractor->extractData($resource);
+        $plainData = $dataExtractor->extractData($resource, array('id' => 2));
 
         $this->assertEquals(1, sizeof($plainData));
-
     }
 
 }

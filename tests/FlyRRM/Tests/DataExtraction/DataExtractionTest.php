@@ -272,4 +272,36 @@ class DataExtractionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($expectedData, $extractedData);
     }
+
+    public function test_data_extractor_with_external_parameters()
+    {
+        $rootResource = new Resource('my__1', 'myCoolResource', 'my_cool_table', 'id');
+        $rootResource->setWhereClause('my_cool_field = :myCoolParam');
+        $rootField = new Field($rootResource, 'myCoolField', 'my_cool_field', Field::TYPE_STRING);
+        $rootResource->addField($rootField);
+
+        $sql = 'select my__1.id as my__1_id, my__1.my_cool_field as my__1_myCoolField from my_cool_table my__1 where my_cool_field = :myCoolParam';
+        $data = array(
+            array('my__1_id' => 1, 'my__1_myCoolField' => 'hello')
+        );
+
+        $queryBuilder = $this->getMock('\FlyRRM\QueryBuilding\QueryBuilder');
+        $queryBuilder
+            ->expects($this->once())
+            ->method('buildQuery')
+            ->with($this->equalTo($rootResource))
+            ->will($this->returnValue($sql));
+
+        $queryExecutor = $this->getMock('\FlyRRM\QueryExecution\QueryExecutor');
+        $queryExecutor
+            ->expects($this->once())
+            ->method('executeQuery')
+            ->with($this->equalTo($sql), $this->equalTo(array('myCoolParam' => 'hello')))
+            ->will($this->returnValue($data));
+
+        $dataExtractor = new DataExtractor($queryBuilder, $queryExecutor);
+        $extractedData = $dataExtractor->extractData($rootResource, array('myCoolParam' => 'hello'));
+
+        $this->assertEquals($data, $extractedData);
+    }
 }
