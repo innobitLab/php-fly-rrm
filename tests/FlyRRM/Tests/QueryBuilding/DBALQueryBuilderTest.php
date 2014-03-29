@@ -127,4 +127,14 @@ class DBALQueryBuilderTest extends \PHPUnit_Framework_TestCase
 
         $generatedToManySql = $this->dbalQueryBuilder->buildToManyQueries($relationship);
     }
+
+    public function test_that_a_resource_with_where_clause_generate_query()
+    {
+        $resource = new Resource('my__0', 'myCoolResource', 'my_cool_table', 'id');
+        $resource->setWhereClause('my_other_field = 4');
+
+        $expectedSql = 'select my__0.id as my__0_id from my_cool_table my__0 where my_other_field = 4';
+
+        $this->assertEquals($expectedSql, $this->dbalQueryBuilder->buildQuery($resource));
+    }
 }

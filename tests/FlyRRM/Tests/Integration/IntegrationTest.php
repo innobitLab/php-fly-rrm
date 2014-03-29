@@ -429,4 +429,67 @@ EOT;
 
         $this->assertEquals($expectedData, $hydratedData);
     }
+
+    public function test_end_to_end_with_simple_where()
+    {
+
+        $yamlMapping = <<<EOT
+resource:
+    alias: 'impiegati'
+    table: 'employees'
+    primary-key: 'id'
+
+    fields:
+        -
+            name: 'name'
+            alias: 'nome'
+
+        -
+            name: 'surname'
+            alias: 'cognome'
+
+        -
+            name: 'code'
+            alias: 'codice'
+
+        -
+            name: 'birthday'
+            alias: 'dataNascita'
+            type: 'date'
+
+        -
+            name: 'created'
+            alias: 'creatoIl'
+            type: 'datetime'
+
+        -
+            name: 'edited'
+            alias: 'modificatoIl'
+            type: 'datetime'
+    where: 'id=2'
+
+EOT;
+
+        $parser = new YamlMappingParser();
+        $resource = $parser->parse($yamlMapping);
+
+        $dbalQueryBuilder = new DBALQueryBuilder();
+
+        $databaseConf = new DatabaseConfiguration();
+        $databaseConf->setDatabaseName($GLOBALS['DB_DBNAME']);
+        $databaseConf->setDriver('pdo_mysql');
+        $databaseConf->setHost($GLOBALS['DB_HOST']);
+        $databaseConf->setPassword($GLOBALS['DB_PASSWD']);
+        $databaseConf->setPort($GLOBALS['DB_PORT']);
+        $databaseConf->setUsername($GLOBALS['DB_USER']);
+        $queryExecutor = new DBALQueryExecutor($databaseConf);
+
+        $dataExtractor = new DataExtractor($dbalQueryBuilder, $queryExecutor);
+
+        $plainData = $dataExtractor->extractData($resource);
+
+        $this->assertEquals(1, sizeof($plainData));
+
+    }
+
 }

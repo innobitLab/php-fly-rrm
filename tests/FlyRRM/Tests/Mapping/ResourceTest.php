@@ -117,4 +117,12 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($relationship, $rootResource->getRelationshipByReferencedResourceAlias('myUnknownResource'));
     }
+
+    public function test_that_a_where_clause_could_be_added_to_resource()
+    {
+        $resource = new Resource('my__0', 'myCoolResource', 'my_cool_table', 'id');
+        $resource->setWhereClause('my_field = 3');
+
+        $this->assertEquals('my_field = 3', $resource->getWhereClause());
+    }
 }

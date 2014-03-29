@@ -9,6 +9,7 @@ class Resource
     private $primaryKey;
     private $fields;
     private $relationships;
+    private $whereClause;
 
     public function getResourceUniqueIdentifier()
     {
@@ -38,6 +39,16 @@ class Resource
     public function getPrimaryKey()
     {
         return $this->primaryKey;
+    }
+
+    public function getWhereClause()
+    {
+        return $this->whereClause;
+    }
+
+    public function setWhereClause($whereClause)
+    {
+        $this->whereClause = $whereClause;
     }
 
     public function __construct($resourceUniqueIdentifier, $alias, $table, $primaryKey)

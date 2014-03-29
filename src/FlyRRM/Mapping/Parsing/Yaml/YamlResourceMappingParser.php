@@ -49,9 +49,24 @@ class YamlResourceMappingParser
     public function parseResource(array $rawYamlParsedResource, $currentId)
     {
         $table = $rawYamlParsedResource['table'];
+        $id = $this->generateResourceUniqueIdentifier($currentId, $table);
+
+        $resource = new Resource(
+            $id,
+            $rawYamlParsedResource['alias'],
+            $table,
+            $rawYamlParsedResource['primary-key']);
+
+        if (isset($rawYamlParsedResource['where']))
+            $resource->setWhereClause($rawYamlParsedResource['where']);
+
+        return $resource;
+    }
+
+    private function generateResourceUniqueIdentifier($currentId, $table)
+    {
         $id = substr($table, 0, 3);
         $id .= '_' . $currentId;
-
-        return new Resource($id, $rawYamlParsedResource['alias'], $table, $rawYamlParsedResource['primary-key']);
+        return $id;
     }
 }

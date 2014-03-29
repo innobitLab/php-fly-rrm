@@ -113,4 +113,18 @@ class YamlResourceMappingParserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('my_id', $resource->getPrimaryKey());
         $this->assertEquals('myT_1', $resource->getResourceUniqueIdentifier());
     }
+
+    public function test_that_a_resource_could_have_a_where_clause()
+    {
+        $rawYamlParsedResource = array(
+            'alias' => 'myResource',
+            'table' => 'myTable',
+            'primary-key' => 'my_id',
+            'fields' => array('field'),
+            'where' => 'my_id = 3');
+
+        $resource = $this->parser->parseResource($rawYamlParsedResource, 1);
+
+        $this->assertEquals('my_id = 3', $resource->getWhereClause());
+    }
 }

@@ -11,7 +11,8 @@ class DBALQueryBuilder implements QueryBuilder
     public function buildQuery(Resource $resource)
     {
         return 'select ' . $this->buildSelectFields($resource) .
-               ' from ' . $this->buildFromClause($resource);
+               ' from ' . $this->buildFromClause($resource) .
+               $this->buildWhereClause($resource);
     }
 
     private function buildSelectFields(Resource $resource)
@@ -90,5 +91,11 @@ class DBALQueryBuilder implements QueryBuilder
         $mainResource = $rel->getMainResource();
         $referencedResource = $rel->getReferencedResource();
         return ' where ' . $referencedResource->getResourceUniqueIdentifier() . '.' . $rel->getJoinColumn() . ' = ' . ':' . $mainResource->getResourceUniqueIdentifier() . '_' . $mainResource->getPrimaryKey();
+    }
+
+    private function buildWhereClause(Resource $resource)
+    {
+        $whereClause = $resource->getWhereClause();
+        return (empty($whereClause) ? '' : ' where ' . $whereClause);
     }
 }
