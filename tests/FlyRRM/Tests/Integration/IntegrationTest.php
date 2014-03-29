@@ -319,13 +319,7 @@ EOT;
 
         $dbalQueryBuilder = new DBALQueryBuilder();
 
-        $databaseConf = new DatabaseConfiguration();
-        $databaseConf->setDatabaseName($GLOBALS['DB_DBNAME']);
-        $databaseConf->setDriver('pdo_mysql');
-        $databaseConf->setHost($GLOBALS['DB_HOST']);
-        $databaseConf->setPassword($GLOBALS['DB_PASSWD']);
-        $databaseConf->setPort($GLOBALS['DB_PORT']);
-        $databaseConf->setUsername($GLOBALS['DB_USER']);
+        $databaseConf = $this->buildDatabaseConfigurationFromGlobals();
         $queryExecutor = new DBALQueryExecutor($databaseConf);
 
         $dataExtractor = new DataExtractor($dbalQueryBuilder, $queryExecutor);
@@ -474,13 +468,7 @@ EOT;
 
         $dbalQueryBuilder = new DBALQueryBuilder();
 
-        $databaseConf = new DatabaseConfiguration();
-        $databaseConf->setDatabaseName($GLOBALS['DB_DBNAME']);
-        $databaseConf->setDriver('pdo_mysql');
-        $databaseConf->setHost($GLOBALS['DB_HOST']);
-        $databaseConf->setPassword($GLOBALS['DB_PASSWD']);
-        $databaseConf->setPort($GLOBALS['DB_PORT']);
-        $databaseConf->setUsername($GLOBALS['DB_USER']);
+        $databaseConf = $this->buildDatabaseConfigurationFromGlobals();
         $queryExecutor = new DBALQueryExecutor($databaseConf);
 
         $dataExtractor = new DataExtractor($dbalQueryBuilder, $queryExecutor);
@@ -488,6 +476,18 @@ EOT;
         $plainData = $dataExtractor->extractData($resource, array('id' => 2));
 
         $this->assertEquals(1, sizeof($plainData));
+    }
+
+    private function buildDatabaseConfigurationFromGlobals()
+    {
+        $databaseConf = new DatabaseConfiguration();
+        $databaseConf->setDatabaseName($GLOBALS['DB_DBNAME']);
+        $databaseConf->setDriver('pdo_mysql');
+        $databaseConf->setHost($GLOBALS['DB_HOST']);
+        $databaseConf->setPassword($GLOBALS['DB_PASSWD']);
+        $databaseConf->setPort($GLOBALS['DB_PORT']);
+        $databaseConf->setUsername($GLOBALS['DB_USER']);
+        return $databaseConf;
     }
 
 }
