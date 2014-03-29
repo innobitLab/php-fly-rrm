@@ -47,7 +47,7 @@ class DBALQueryBuilder implements QueryBuilder
     private function buildSelectFieldClause(Field $field)
     {
         $resource = $field->getResource();
-        return $resource->getResourceUniqueIdentifier() . '.' . $field->getName() . ' as ' . $resource->getResourceUniqueIdentifier() . '_' . $field->getAlias();
+        return $this->buildFieldUniqueName($field) . ' as ' . $resource->getResourceUniqueIdentifier() . '_' . $field->getAlias();
     }
 
     private function buildFromClause(Resource $resource)
@@ -96,6 +96,21 @@ class DBALQueryBuilder implements QueryBuilder
     private function buildWhereClause(Resource $resource)
     {
         $whereClause = $resource->getWhereClause();
-        return (empty($whereClause) ? '' : ' where ' . $whereClause);
+        $whereClause = (empty($whereClause) ? '' : ' where ' . $whereClause);
+
+        /** @var $f \FlyRRM\Mapping\Field */
+        foreach ($resource->getFields() as $f) {
+            $fieldCompleteAlias = $resource->getAlias() . '.' . $f->getAlias();
+            $fieldCompleteName = $this->buildFieldUniqueName($f);
+            $whereClause = str_replace($fieldCompleteAlias, $fieldCompleteName, $whereClause);
+        }
+
+        return $whereClause;
+    }
+
+    private function buildFieldUniqueName(Field $field)
+    {
+        $resource = $field->getResource();
+        return $resource->getResourceUniqueIdentifier() . '.' . $field->getName();
     }
 }

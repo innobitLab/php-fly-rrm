@@ -137,4 +137,17 @@ class DBALQueryBuilderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($expectedSql, $this->dbalQueryBuilder->buildQuery($resource));
     }
+
+    public function test_that_a_field_in_a_where_clause_is_replaced_with_unique_alias()
+    {
+        $resource = new Resource('my__0', 'myCoolResource', 'my_cool_table', 'id');
+        $hotField = new Field($resource, 'myHotField', 'my_hot_field', Field::TYPE_NUMBER);
+        $resource->addField($hotField);
+
+        $resource->setWhereClause('myCoolResource.myHotField = :myParam');
+
+        $expectedSql = 'select my__0.id as my__0_id, my__0.my_hot_field as my__0_myHotField from my_cool_table my__0 where my__0.my_hot_field = :myParam';
+
+        $this->assertEquals($expectedSql, $this->dbalQueryBuilder->buildQuery($resource));
+    }
 }
