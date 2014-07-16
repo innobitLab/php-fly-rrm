@@ -450,7 +450,7 @@ EOT;
 
         $dataExtractor = new DataExtractor($dbalQueryBuilder, $queryExecutor);
 
-        $plainData = $dataExtractor->extractData($resource, array('id' => 2));
+        $plainData = $dataExtractor->extractData($resource, array(':id' => 2));
 
         $this->assertEquals(1, sizeof($plainData));
     }
@@ -468,6 +468,44 @@ resource:
             name: 'name'
             alias: 'nome'
 
+    relationships:
+        -
+            type: 'one-to-many'
+            join-column: 'id_employee'
+
+            resource:
+                alias: 'pagamenti'
+                table: 'payments'
+                primary-key: 'id'
+
+                fields:
+                    -
+                        name: 'value'
+                        alias: 'Valore'
+                        type: 'number'
+
+        -
+            type: 'many-to-one'
+            join-column: 'id_user_creator'
+
+            resource:
+                alias: 'utenteCreazione'
+                table: 'users'
+                primary-key: 'id'
+
+                fields:
+                    -
+                        name: 'username'
+                        alias: 'Username'
+
+                    -
+                        name: 'firstname'
+                        alias: 'Nome'
+
+                    -
+                        name: 'lastname'
+                        alias: 'Cognome'
+
     where: 'impiegati.nome = :nome'
 EOT;
 
@@ -481,7 +519,7 @@ EOT;
 
         $dataExtractor = new DataExtractor($dbalQueryBuilder, $queryExecutor);
 
-        $plainData = $dataExtractor->extractData($resource, array('nome' => 'Mario'));
+        $plainData = $dataExtractor->extractData($resource, array(':nome' => 'Mario'));
 
         $this->assertEquals(1, sizeof($plainData));
     }

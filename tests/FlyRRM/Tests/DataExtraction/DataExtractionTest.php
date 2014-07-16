@@ -296,11 +296,11 @@ class DataExtractionTest extends \PHPUnit_Framework_TestCase
         $queryExecutor
             ->expects($this->once())
             ->method('executeQuery')
-            ->with($this->equalTo($sql), $this->equalTo(array('myCoolParam' => 'hello')))
+            ->with($this->equalTo($sql), $this->equalTo(array(':myCoolParam' => 'hello')))
             ->will($this->returnValue($data));
 
         $dataExtractor = new DataExtractor($queryBuilder, $queryExecutor);
-        $extractedData = $dataExtractor->extractData($rootResource, array('myCoolParam' => 'hello'));
+        $extractedData = $dataExtractor->extractData($rootResource, array(':myCoolParam' => 'hello'));
 
         $this->assertEquals($data, $extractedData);
     }
